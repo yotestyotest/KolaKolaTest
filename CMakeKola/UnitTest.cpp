@@ -6,6 +6,8 @@
 #include "KWorkRegistry.h"
 #include "KParameters.h"
 
+Ledger calculate(const KParameters& parameters, const KWorkRegistry& workdays);
+
 void Test_KHour()
 {
 	KHour empty;
@@ -116,7 +118,22 @@ void Test_KParameters()
 	def.set_example();
 	auto s = def.print_short();
 	assert(def.print_short() == "$145.5/h Wknd/Evng: 23.5/15.5 Tax: 25%");
+}
 
+void Test_Ledger()
+{
+	KParameters def;
+	def.set_example();
+
+	KWorkRegistry kw2;
+	kw2.deserialize("2024-04-01 7.5 17.5\n2024-04-02 8.5 9.5\n", false);
+
+	auto res = calculate(def, kw2);
+
+	assert(res.tax == 25);
+	assert(res.ledger.size() == 2);
+	assert(res.total == 1608.25);
+	assert(res.total_after_tax == 1206.1875);
 }
 
 // run all tests
@@ -127,4 +144,5 @@ void Test()
 	Test_KWorkday();
 	Test_KWorkRegistry();
 	Test_KParameters();
+	Test_Ledger();
 }

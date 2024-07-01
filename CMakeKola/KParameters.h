@@ -8,6 +8,26 @@
 
 #include "KConsole.h"
 
+class KWorkday;
+
+// Todo: move calculations into own class or into KParameters
+struct Ledge
+{
+	double day{};
+	double night{};
+	double total{};
+	const KWorkday* pWorkday{};
+};
+
+struct Ledger
+{
+	std::vector<Ledge> ledger;
+	double total{};
+	double total_after_tax{};
+	double tax{};
+};
+
+
 class KParameters
 {
 	inline static auto database_filename = "KParameters.txt";
